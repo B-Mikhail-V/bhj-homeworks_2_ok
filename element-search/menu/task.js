@@ -1,11 +1,14 @@
-const menuLink = document.querySelectorAll('.menu__link')
+let menuLink = document.querySelectorAll('.menu__link')
 
 Array.from(menuLink).forEach(element => {
   if(element.nextElementSibling) {
-      console.log(element.nextElementSibling); 
     element.onclick = () => {
+      if(element.nextElementSibling.classList.contains('menu_active')) {
+        closeSubMenu();
+        return false
+      }
       closeSubMenu();
-      element.nextElementSibling.classList.toggle('menu_active')
+      element.nextElementSibling.classList.add('menu_active')
       return false
     }
   }
