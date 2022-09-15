@@ -1,11 +1,19 @@
-const el1 = document.querySelector('.show-success');
-const el2 = document.querySelector('.btn_success');
-const el3 = document.querySelectorAll('.modal__close_times');
+const el1 = document.getElementById('modal_main')
+const el2 = document.getElementById('modal_success')
+const closeSigns = document.querySelectorAll('.modal__close_times');
 
-el1.onclick = () => {
-    el1.closest('.modal_active').className = 'modal';
-    el2.closest('.modal').className = 'modal_success';
+el1.classList.add('modal_active')
+
+const btn = document.querySelector('.btn')
+
+btn.onclick = () => {
+    el1.classList.remove('modal_active');
+    el2.classList.add('modal_active')
+
 }
-el3[1].onclick = () => {
-    el2.closest('.modal_success').className = 'modal';
-}
+ 
+closeSigns.forEach(element => {
+    element.onclick = function () {
+        this.closest('.modal_active').classList.remove('modal_active')
+    }
+});
