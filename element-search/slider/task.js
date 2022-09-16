@@ -1,83 +1,57 @@
-const sliderItem = document.querySelectorAll('.slider__item')
-const arr1 = Array.from(sliderItem)
+// массив со слайдами
+function getSliderItem() {
+   return Array.from(document.querySelectorAll('.slider__item'))
+} 
 
-let indexCurr = 0;
 
-// счетчик для стрелок слайдера
-function counter(index) {
-    if(index > sliderItem.length - 1) {
-        index = index % sliderItem.length;
-    } else if (index < -sliderItem.length) {
-        index = index % sliderItem.length * -1
-    } else if (index < 0) {
-        index = sliderItem.length + indexCurr
-        
-    }
-    return index;
+// находим индекс активного слайда
+function activeSlide() {
+   return getSliderItem().indexOf(document.querySelector('.slider__item_active'))
+   // return getSliderItem().findIndex(document.getElementsByClassName('slider__item slider__item_active'))
+} 
+
+// деактивация текущего слайда и текущей точки
+function deactivateSlide(index) {
+   getSliderItem()[index].classList.remove('slider__item_active')
+   document.querySelectorAll('.slider__dot')[index].classList.remove('slider__dot_active')
 }
 
-// отключение всех активных картинок
-function deactiveSlider() {
-    const allSliders = document.querySelectorAll('.slider__item');
-    allSliders.forEach(element => {
-      element.classList.remove('slider__item_active')
-    })
-  }
-
-// отключение всех активных точек
-function deactiveDot() {
-    const allDots = document.querySelectorAll('.slider__dot');
-    allDots.forEach(element => {
-
-      element.classList.remove('slider__dot_active')
-    })
-  }
-
-// действие для стрелки вперед
-const nextClick = document.querySelector('.slider__arrow_next')
-nextClick.onclick = () => {
-    indexCurr++;
-    deactiveSlider();
-    deactiveDot();
-    arr1[counter(indexCurr)].classList.add('slider__item_active');
-    arr2[counter(indexCurr)].classList.add('slider__dot_active');
-
-
+// активация слайда и точки
+function activateSlide(index) {
+   getSliderItem()[index].classList.add('slider__item_active')
+   document.querySelectorAll('.slider__dot')[index].classList.add('slider__dot_active')
 }
 
-// действие для стрелки назад
-const prevClick = document.querySelector('.slider__arrow_prev')
-prevClick.onclick = () => {
-    indexCurr--;
-    deactiveSlider();
-    deactiveDot();
-    arr1[counter(indexCurr)].classList.add('slider__item_active');
-    arr2[counter(indexCurr)].classList.add('slider__dot_active');
+// определение позиции для активации
+function getIndexActivate(index, arr) {
+   if (index < 0) {
+      return arr.length - 1
+   } else if (index > arr.length -1) {
+      return 0;
+   } else {
+      return index;
+   }
 }
 
-// действие для точек
+//обработка события стрелкой вперед
+document.querySelector('.slider__arrow_next').onclick = () => {
+   indexForAct = activeSlide() + 1;
+   deactivateSlide(activeSlide());
+   activateSlide(getIndexActivate(indexForAct, getSliderItem()));
+}
+
+// обработка события стрелкой назад
+document.querySelector('.slider__arrow_prev').onclick = () => {
+   indexForAct = activeSlide() - 1;
+   deactivateSlide(activeSlide());
+   activateSlide(getIndexActivate(indexForAct, getSliderItem()));
+}
+
+//обработка события точки
 const dotItem = document.querySelectorAll('.slider__dot')
-const arr2 = Array.from(dotItem);
-for(let i = 0; i < arr2.length; i++) {
-    arr2[i].onclick = () => {
-        deactiveSlider();
-        console.log(arr2);
-        deactiveDot();
-        console.log(arr2);
-        arr2[i].classList.add('slider__dot_active');
-        arr1[i].classList.add('slider__item_active');
-        console.log(arr2);
-    }
+for ( let i = 0; i < dotItem.length; i++) {
+   dotItem[i].onclick = () => {
+      deactivateSlide(activeSlide());
+      activateSlide(i);
+   }
 }
-
-
-// определение индекса для активной стартовой картинки
-const indexStart = () => {
-    for(let i = 0; i < arr1.length; i++) {
-        if(arr1[i].className == 'slider__item slider__item_active')
-        return i;
-    }
-}
-
-// активирование точки, которая соответствует активной стартовой картинки
-arr2[indexStart()].classList.add('slider__dot_active')
