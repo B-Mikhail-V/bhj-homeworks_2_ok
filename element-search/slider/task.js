@@ -1,24 +1,23 @@
 // массив со слайдами
-function getSliderItem() {
-   return Array.from(document.querySelectorAll('.slider__item'))
-} 
+SliderItem = Array.from(document.querySelectorAll('.slider__item'))
+
 
 
 // находим индекс активного слайда
 function activeSlide() {
-   return getSliderItem().indexOf(document.querySelector('.slider__item_active'))
-   // return getSliderItem().findIndex(document.getElementsByClassName('slider__item slider__item_active'))
+   return SliderItem.findIndex(slide => slide.classList.contains('slider__item_active'))
+   
 } 
 
 // деактивация текущего слайда и текущей точки
 function deactivateSlide(index) {
-   getSliderItem()[index].classList.remove('slider__item_active')
+   SliderItem[index].classList.remove('slider__item_active')
    document.querySelectorAll('.slider__dot')[index].classList.remove('slider__dot_active')
 }
 
 // активация слайда и точки
 function activateSlide(index) {
-   getSliderItem()[index].classList.add('slider__item_active')
+   SliderItem[index].classList.add('slider__item_active')
    document.querySelectorAll('.slider__dot')[index].classList.add('slider__dot_active')
 }
 
@@ -37,14 +36,14 @@ function getIndexActivate(index, arr) {
 document.querySelector('.slider__arrow_next').onclick = () => {
    indexForAct = activeSlide() + 1;
    deactivateSlide(activeSlide());
-   activateSlide(getIndexActivate(indexForAct, getSliderItem()));
+   activateSlide(getIndexActivate(indexForAct, SliderItem));
 }
 
 // обработка события стрелкой назад
 document.querySelector('.slider__arrow_prev').onclick = () => {
    indexForAct = activeSlide() - 1;
    deactivateSlide(activeSlide());
-   activateSlide(getIndexActivate(indexForAct, getSliderItem()));
+   activateSlide(getIndexActivate(indexForAct, SliderItem));
 }
 
 //обработка события точки
